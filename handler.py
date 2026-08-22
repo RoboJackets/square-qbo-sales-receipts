@@ -4,7 +4,6 @@ Record Square deposits as sales receipts in QuickBooks Online
 
 from aws_lambda_powertools import Logger, Tracer
 from aws_lambda_powertools.event_handler import LambdaFunctionUrlResolver, Response
-from aws_lambda_powertools.event_handler.middlewares import NextMiddleware
 from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
