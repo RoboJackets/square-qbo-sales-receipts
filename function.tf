@@ -170,7 +170,6 @@ resource "aws_cloudwatch_metric_alarm" "function_failures" {
   dimensions = {
     FunctionName = aws_lambda_function.lambda_function.function_name
   }
-  treat_missing_data = "notBreaching"
 }
 
 output "function_url" {
