@@ -35,3 +35,7 @@ build-backend = "poetry.core.masonry.api"
 packages = [
     { include = "handler.py" },
 ]
+
+[[tool.mypy.overrides]]
+module = "intuitlib.*"
+ignore_missing_imports = true

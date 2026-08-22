@@ -96,6 +96,7 @@ resource "aws_lambda_function" "lambda_function" {
     variables = {
       SQUARE_TOKEN             = sensitive("")
       SQUARE_SIGNATURE_KEY     = sensitive("")
+      QUICKBOOKS_ENVIRONMENT   = sensitive("")
       QUICKBOOKS_CLIENT_ID     = sensitive("")
       QUICKBOOKS_CLIENT_SECRET = sensitive("")
       QUICKBOOKS_COMPANY_ID    = sensitive("")
