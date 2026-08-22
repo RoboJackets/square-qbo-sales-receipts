@@ -8,7 +8,6 @@ from aws_lambda_powertools.event_handler.middlewares import NextMiddleware
 from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-
 tracer = Tracer()
 logger = Logger()
 app = LambdaFunctionUrlResolver()
