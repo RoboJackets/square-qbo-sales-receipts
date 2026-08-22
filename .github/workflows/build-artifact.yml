@@ -52,6 +52,7 @@ jobs:
         run: |
           poetry bundle venv _bundle/ --without dev --clear --platform manylinux2014_arm64 --python python3.15
           cd _bundle/lib/python3.15/site-packages/
+          rm -rf boto*
           zip -r ../../../../_bundle.zip .
 
       - name: Upload bundle
