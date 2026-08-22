@@ -90,7 +90,10 @@ def quickbooks_auth_callback() -> Response:  # type: ignore
             status_code=400, content_type="text/plain", body="Missing code or realmId"
         )
 
-    if os.environ["QUICKBOOKS_COMPANY_ID"] != "" and os.environ["QUICKBOOKS_COMPANY_ID"] != realm_id:
+    if (
+        os.environ["QUICKBOOKS_COMPANY_ID"] != ""
+        and os.environ["QUICKBOOKS_COMPANY_ID"] != realm_id
+    ):
         return Response(
             status_code=400, content_type="text/plain", body="Already authorized"
         )
