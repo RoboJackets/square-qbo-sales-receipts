@@ -94,12 +94,12 @@ resource "aws_lambda_function" "lambda_function" {
 
   environment {
     variables = {
-      SQUARE_TOKEN = sensitive("")
-      SQUARE_SIGNATURE_KEY = sensitive("")
-      QUICKBOOKS_CLIENT_ID = sensitive("")
+      SQUARE_TOKEN             = sensitive("")
+      SQUARE_SIGNATURE_KEY     = sensitive("")
+      QUICKBOOKS_CLIENT_ID     = sensitive("")
       QUICKBOOKS_CLIENT_SECRET = sensitive("")
-      QUICKBOOKS_COMPANY_ID = sensitive("")
-      QUICKBOOKS_ACCESS_TOKEN = sensitive("")
+      QUICKBOOKS_COMPANY_ID    = sensitive("")
+      QUICKBOOKS_ACCESS_TOKEN  = sensitive("")
       QUICKBOOKS_REFRESH_TOKEN = sensitive("")
     }
   }
@@ -124,7 +124,7 @@ resource "aws_lambda_function" "lambda_function" {
 }
 
 resource "aws_lambda_function_event_invoke_config" "config" {
-  function_name = aws_lambda_function.lambda_function.arn
+  function_name                = aws_lambda_function.lambda_function.arn
   maximum_event_age_in_seconds = 21600
 }
 
@@ -157,16 +157,16 @@ resource "aws_sns_topic" "alarm_topic" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "function_failures" {
-  alarm_name = "square-qbo-${var.environment_name}"
+  alarm_name          = "square-qbo-${var.environment_name}"
   comparison_operator = "GreaterThanThreshold"
   evaluation_interval = 60
-  evaluation_periods = 1
-  namespace = "AWS/Lambda"
-  metric_name = "Errors"
-  period = 60
-  statistic = "Minimum"
-  threshold = 0
-  alarm_actions = [aws_sns_topic.alarm_topic.arn]
+  evaluation_periods  = 1
+  namespace           = "AWS/Lambda"
+  metric_name         = "Errors"
+  period              = 60
+  statistic           = "Minimum"
+  threshold           = 0
+  alarm_actions       = [aws_sns_topic.alarm_topic.arn]
   datapoints_to_alarm = 1
   dimensions = {
     FunctionName = aws_lambda_function.lambda_function.function_name
