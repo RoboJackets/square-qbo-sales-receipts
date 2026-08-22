@@ -23,7 +23,7 @@ logger = Logger()
 app = LambdaFunctionUrlResolver()
 
 
-def get_auth_client(app: LambdaFunctionUrlResolver) -> AuthClient:
+def get_auth_client() -> AuthClient:
     """
     Get the QuickBooks auth client
     """
@@ -66,7 +66,7 @@ def quickbooks_auth_start() -> Response:  # type: ignore
     """
     Redirect to QuickBooks to authorize access to the company
     """
-    auth_client = get_auth_client(app)
+    auth_client = get_auth_client()
 
     return Response(
         status_code=302,
@@ -98,7 +98,7 @@ def quickbooks_auth_callback() -> Response:  # type: ignore
             status_code=400, content_type="text/plain", body="Already authorized"
         )
 
-    auth_client = get_auth_client(app)
+    auth_client = get_auth_client()
     auth_client.get_bearer_token(code, realm_id=realm_id)
 
     new_environment_variables = {
