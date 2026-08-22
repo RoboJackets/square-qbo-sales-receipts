@@ -1,0 +1,24 @@
+---
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  ApiLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: square-qbo-local
+      PackageType: Zip
+      Runtime: python3.15
+      CodeUri: ./_bundle.zip
+      Handler: handler.handler
+      Environment:
+        Variables:
+          SQUARE_TOKEN:
+          SQUARE_SIGNATURE_KEY:
+          QUICKBOOKS_CLIENT_ID:
+          QUICKBOOKS_CLIENT_SECRET:
+          QUICKBOOKS_COMPANY_ID:
+          QUICKBOOKS_ACCESS_TOKEN:
+          QUICKBOOKS_REFRESH_TOKEN:
+      Events:
+        HttpApiEvent:
+          Type: HttpApi

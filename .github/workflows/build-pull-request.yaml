@@ -1,0 +1,31 @@
+---
+name: Build Main
+
+on:
+  pull_request:
+    branches:
+    - main
+
+jobs:
+
+  build-artifact:
+    name: Build Lambda ZIP
+    uses: ./.github/workflows/build-artifact.yml
+
+    permissions:
+      contents: read
+
+  deploy-test:
+    name: Deploy Test
+    uses: ./.github/workflows/deploy.yml
+
+    needs:
+      - build-artifact
+
+    with:
+      environment: test
+
+    permissions:
+      id-token: write
+      contents: read
+

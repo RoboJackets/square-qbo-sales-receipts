@@ -216,3 +216,13 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Build artifacts
+_bundle/
+_bundle.zip
+
+# Local testing files
+env.json
+
+# Terraform stuff
+.terraform/

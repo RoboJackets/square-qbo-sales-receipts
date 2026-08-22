@@ -1,0 +1,68 @@
+---
+name: Deploy Lambda Function
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+jobs:
+  terraform-apply:
+    name: Deploy Lambda Function
+    runs-on: ubuntu-24.04
+
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ steps.get_outputs.outputs.function_url }}
+
+    permissions:
+      id-token: write
+      contents: read
+
+    concurrency:
+      group: terraform-apply-${{ github.ref }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Lambda ZIP
+        uses: actions/download-artifact@v4
+        with:
+          name: artifact
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
+      - name: Get AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::771971951923:role/square-qbo-provisioning
+          audience: sts.amazonaws.com
+          role-duration-seconds: 900
+
+      - name: Check Terraform format
+        run: terraform fmt -check
+
+      - name: Initialize Terraform
+        run: terraform init -backend-config="key=${{ inputs.environment }}.tfstate"
+
+      - name: Validate Terraform code
+        run: terraform validate
+
+      - name: Terraform Apply
+        run: terraform apply -var=environment_name=${{ inputs.environment }} -auto-approve
+
+      - name: Get Terraform outputs
+        id: get_outputs
+        run: |
+          echo "function_url=$(terraform output -raw function_url)" >> $GITHUB_OUTPUT
+
+      - name: Ping function URL to make sure it's working
+        run: curl --silent --show-error --fail ${{ steps.get_outputs.outputs.function_url }}ping

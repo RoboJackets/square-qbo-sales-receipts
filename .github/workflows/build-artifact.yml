@@ -1,0 +1,62 @@
+---
+name: Build Lambda ZIP
+
+on:
+  workflow_call:
+
+jobs:
+  build-artifact:
+    name: Build Lambda ZIP
+    runs-on: ubuntu-24.04
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.15'
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v4
+
+      - name: Add bundle plugin
+        run: poetry self add poetry-plugin-bundle
+
+      - name: Cache the virtualenv
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pypoetry
+          key: venv-${{ hashFiles('poetry.lock') }}
+
+      - name: Install Poetry dependencies
+        run: poetry install
+
+      - name: Run black
+        run: poetry run black --check handler.py
+
+      - name: Run flake8
+        run: poetry run flake8 handler.py
+
+      - name: Run pylint
+        run: poetry run pylint handler.py
+
+      - name: Run mypy
+        run: poetry run mypy --strict --scripts-are-modules handler.py
+
+      - name: Build bundle
+        run: |
+          poetry bundle venv _bundle/ --without dev --clear --platform manylinux2014_arm64 --python python3.15
+          cd _bundle/lib/python3.13/site-packages/
+          zip -r ../../../../_bundle.zip .
+
+      - name: Upload bundle
+        uses: actions/upload-artifact@v4
+        with:
+          path: _bundle.zip
+          if-no-files-found: error
+          compression-level: 0
