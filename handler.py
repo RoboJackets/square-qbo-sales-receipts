@@ -149,7 +149,7 @@ def square_webhook() -> Response:  # type: ignore
         )
 
     if not verify_signature(
-        request_body=event.body,
+        request_body=event.body,  # type: ignore
         signature_header=signature,
         signature_key=os.environ["SQUARE_SIGNATURE_KEY"],
         notification_url=url,
@@ -165,7 +165,7 @@ def square_webhook() -> Response:  # type: ignore
         lambda_client.invoke(
             FunctionName=os.environ["AWS_LAMBDA_FUNCTION_NAME"],
             InvocationType="Event",
-            Payload=dumps({"payout_id": loads(event.body)["data"]["id"]}),
+            Payload=dumps({"payout_id": loads(event.body)["data"]["id"]}),  # type: ignore
         )
     except Exception:
         logger.error(traceback.format_exc())
