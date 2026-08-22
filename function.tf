@@ -159,7 +159,6 @@ resource "aws_sns_topic" "alarm_topic" {
 resource "aws_cloudwatch_metric_alarm" "function_failures" {
   alarm_name          = "square-qbo-${var.environment_name}"
   comparison_operator = "GreaterThanThreshold"
-  evaluation_interval = 60
   evaluation_periods  = 1
   namespace           = "AWS/Lambda"
   metric_name         = "Errors"
