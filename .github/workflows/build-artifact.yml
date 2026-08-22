@@ -19,7 +19,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.15'
+          python-version: '3.15.0-rc.1'
 
       - name: Setup Poetry
         uses: abatilo/actions-poetry@v4
@@ -51,7 +51,7 @@ jobs:
       - name: Build bundle
         run: |
           poetry bundle venv _bundle/ --without dev --clear --platform manylinux2014_arm64 --python python3.15
-          cd _bundle/lib/python3.13/site-packages/
+          cd _bundle/lib/python3.15/site-packages/
           zip -r ../../../../_bundle.zip .
 
       - name: Upload bundle
