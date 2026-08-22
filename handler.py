@@ -84,9 +84,16 @@ def quickbooks_auth_callback() -> Response:  # type: ignore
     """
     code = app.current_event.query_string_parameters.get("code")
     realm_id = app.current_event.query_string_parameters.get("realmId")
-    
+
     if not code or not realm_id:
-        return Response(status_code=400, content_type="text/plain", body="Missing code or realmId")
+        return Response(
+            status_code=400, content_type="text/plain", body="Missing code or realmId"
+        )
+
+    if os.environ["QUICKBOOKS_COMPANY_ID"] != "" and os.environ["QUICKBOOKS_COMPANY_ID"] != realm_id:
+        return Response(
+            status_code=400, content_type="text/plain", body="Already authorized"
+        )
 
     auth_client = get_auth_client(app)
     auth_client.get_bearer_token(code, realm_id=realm_id)
@@ -106,17 +113,20 @@ def quickbooks_auth_callback() -> Response:  # type: ignore
         lambda_client = client("lambda")
         lambda_client.update_function_configuration(
             FunctionName=os.environ["AWS_LAMBDA_FUNCTION_NAME"],
-            Environment={
-                "Variables": new_environment_variables
-            }
+            Environment={"Variables": new_environment_variables},
         )
     except Exception as e:
         logger.error(f"Failed to update function configuration: {e}")
         logger.error(f"Environment variables: {new_environment_variables}")
-        return Response(status_code=500, content_type="text/plain", body="Failed to store credentials")
+        return Response(
+            status_code=500,
+            content_type="text/plain",
+            body="Failed to store credentials",
+        )
 
-    return Response(status_code=200, content_type="text/plain", body="Authorization successful")
-
+    return Response(
+        status_code=200, content_type="text/plain", body="Authorization successful"
+    )
 
 
 @app.post("/square/webhook")
@@ -131,10 +141,19 @@ def square_webhook() -> Response:  # type: ignore
 
     signature = event.headers.get("x-square-hmacsha256-signature")
     if not signature:
-        return Response(status_code=401, content_type="text/plain", body="Missing signature")
+        return Response(
+            status_code=401, content_type="text/plain", body="Missing signature"
+        )
 
-    if not verify_signature(request_body=event.body, signature_header=signature, signature_key=os.environ["SQUARE_SIGNATURE_KEY"], notification_url=url):
-        return Response(status_code=401, content_type="text/plain", body="Invalid signature")
+    if not verify_signature(
+        request_body=event.body,
+        signature_header=signature,
+        signature_key=os.environ["SQUARE_SIGNATURE_KEY"],
+        notification_url=url,
+    ):
+        return Response(
+            status_code=401, content_type="text/plain", body="Invalid signature"
+        )
 
     logger.info("Webhook received", extra={"body": event.body})
 
@@ -143,7 +162,7 @@ def square_webhook() -> Response:  # type: ignore
         lambda_client.invoke(
             FunctionName=os.environ["AWS_LAMBDA_FUNCTION_NAME"],
             InvocationType="Event",
-            Payload=dumps({"payout_id": loads(event.body)["data"]["id"]})
+            Payload=dumps({"payout_id": loads(event.body)["data"]["id"]}),
         )
     except Exception as e:
         logger.error(traceback.format_exc())
@@ -151,7 +170,7 @@ def square_webhook() -> Response:  # type: ignore
     return Response(status_code=200, content_type="text/plain", body="Webhook received")
 
 
-def process_payout(payout_id: str) -> dict[str,str]:
+def process_payout(payout_id: str) -> dict[str, str]:
     """
     Process a payout event
     """
