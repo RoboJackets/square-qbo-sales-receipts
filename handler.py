@@ -4,17 +4,17 @@ Record Square deposits as sales receipts in QuickBooks Online
 
 import os
 import traceback
-from json import loads, dumps
+from json import dumps, loads
 
 from aws_lambda_powertools import Logger, Tracer
 from aws_lambda_powertools.event_handler import LambdaFunctionUrlResolver, Response
 from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
+from boto3 import client
+
 from intuitlib.client import AuthClient
 from intuitlib.enums import Scopes
-
-from boto3 import client
 
 from square.utils.webhooks_helper import verify_signature
 
@@ -167,7 +167,7 @@ def square_webhook() -> Response:  # type: ignore
             InvocationType="Event",
             Payload=dumps({"payout_id": loads(event.body)["data"]["id"]}),
         )
-    except Exception as e:
+    except Exception:
         logger.error(traceback.format_exc())
 
     return Response(status_code=200, content_type="text/plain", body="Webhook received")
