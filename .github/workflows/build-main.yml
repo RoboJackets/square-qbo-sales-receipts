@@ -29,17 +29,17 @@ jobs:
       id-token: write
       contents: read
 
-  # deploy-production:
-  #   name: Deploy Production
-  #   uses: ./.github/workflows/deploy.yml
+  deploy-production:
+    name: Deploy Production
+    uses: ./.github/workflows/deploy.yml
 
-  #   needs:
-  #     - build-artifact
-  #     - deploy-test
+    needs:
+      - build-artifact
+      - deploy-test
 
-  #   with:
-  #     environment: production
+    with:
+      environment: production
 
-  #   permissions:
-  #     id-token: write
-  #     contents: read
+    permissions:
+      id-token: write
+      contents: read
