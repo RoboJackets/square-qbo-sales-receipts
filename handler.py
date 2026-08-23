@@ -325,6 +325,8 @@ def build_dues_line(order_line_item: OrderLineItem) -> SalesItemLine:
     )
     dues.Amount = order_line_item.total_money.amount / 100  # type: ignore[union-attr,operator]
 
+    return dues
+
 
 def build_processing_fee_line(
     order_line_item: OrderLineItem, payment: Payment
