@@ -117,7 +117,7 @@ resource "aws_lambda_function" "lambda_function" {
   source_code_hash = filebase64sha256("./_bundle.zip")
 
   memory_size = 512
-  timeout     = 30
+  timeout     = 900
 
   tracing_config {
     mode = "Active"
