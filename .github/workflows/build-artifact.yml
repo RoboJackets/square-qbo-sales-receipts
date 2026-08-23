@@ -24,8 +24,8 @@ jobs:
       - name: Setup Poetry
         uses: abatilo/actions-poetry@v4
 
-      - name: Add bundle plugin
-        run: poetry self add poetry-plugin-bundle
+      - name: Add export plugin
+        run: poetry self add poetry-plugin-export
 
       - name: Cache the virtualenv
         uses: actions/cache@v4
@@ -48,12 +48,14 @@ jobs:
       - name: Run mypy
         run: poetry run mypy --strict --scripts-are-modules handler.py
 
-      - name: Build bundle
-        run: |
-          poetry bundle venv _bundle/ --without dev --clear --platform manylinux_2_39_arm64 --python python3.15
-          cd _bundle/lib/python3.15/site-packages/
-          rm -rf boto*
-          zip -r ../../../../_bundle.zip .
+      - name: Export requirements
+        run: poetry export -f requirements.txt --without dev --without-hashes -o requirements.txt
+
+      - name: Build bundle in Lambda 3.15 container
+        uses: docker://public.ecr.aws/lambda/python:3.15-preview
+        with:
+          entrypoint: /bin/bash
+          args: .github/scripts/build-lambda-bundle.sh
 
       - name: Upload bundle
         uses: actions/upload-artifact@v4
