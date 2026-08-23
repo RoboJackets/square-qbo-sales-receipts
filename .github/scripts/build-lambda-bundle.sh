@@ -26,6 +26,7 @@ python3.15 -m pip install -r requirements-no-crypto.txt \
   --no-deps \
   --target _bundle/lib/python3.15/site-packages
 
+cp handler.py _bundle/lib/python3.15/site-packages/
 cd _bundle/lib/python3.15/site-packages
 rm -rf boto*
 zip -r ../../../../_bundle.zip .
