@@ -1,6 +1,6 @@
 set -xeuo pipefail
 
-dnf -y install gcc gcc-c++ make curl libffi-devel zip || microdnf -y install gcc gcc-c++ make curl libffi-devel zip
+dnf -y install gcc gcc-c++ make libffi-devel zip || microdnf -y install gcc gcc-c++ make libffi-devel zip
 
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
 source "$HOME/.cargo/env"
