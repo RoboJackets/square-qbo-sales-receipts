@@ -40,3 +40,7 @@ packages = [
 [[tool.mypy.overrides]]
 module = "intuitlib.*"
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "quickbooks.*"
+ignore_missing_imports = true

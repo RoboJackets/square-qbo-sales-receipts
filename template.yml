@@ -7,7 +7,8 @@ Resources:
     Properties:
       FunctionName: square-qbo-local
       PackageType: Zip
-      Runtime: python3.14
+      Runtime: python3.12
+      Timeout: 900
       CodeUri: ./_bundle.zip
       Handler: handler.handler
       Environment:
@@ -20,6 +21,12 @@ Resources:
           QUICKBOOKS_COMPANY_ID:
           QUICKBOOKS_ACCESS_TOKEN:
           QUICKBOOKS_REFRESH_TOKEN:
+          QUICKBOOKS_CUSTOMER_ID:
+          QUICKBOOKS_CLASS_ID:
+          QUICKBOOKS_DEPOSIT_ACCOUNT_ID:
+          QUICKBOOKS_PAYMENT_METHOD_ID:
+          QUICKBOOKS_DUES_ITEM_ID:
+          QUICKBOOKS_PROCESSING_FEE_ITEM_ID:
       Events:
         HttpApiEvent:
           Type: HttpApi
