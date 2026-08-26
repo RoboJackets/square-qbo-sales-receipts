@@ -5,7 +5,7 @@ clean:
 	rm -rf _bundle.zip
 
 env.json:
-	echo '{"ApiLambda": {"SQUARE_TOKEN": "", "SQUARE_SIGNATURE_KEY": "", "QUICKBOOKS_ENVIRONMENT": "sandbox", "QUICKBOOKS_CLIENT_ID": "", "QUICKBOOKS_CLIENT_SECRET": "", "QUICKBOOKS_COMPANY_ID": "", "QUICKBOOKS_ACCESS_TOKEN": "", "QUICKBOOKS_REFRESH_TOKEN": ""}}' > env.json
+	echo '{"ApiLambda": {"SQUARE_TOKEN": "", "SQUARE_SIGNATURE_KEY": "", "QUICKBOOKS_ENVIRONMENT": "sandbox", "QUICKBOOKS_CLIENT_ID": "", "QUICKBOOKS_CLIENT_SECRET": "", "QUICKBOOKS_COMPANY_ID": "", "QUICKBOOKS_ACCESS_TOKEN": "", "QUICKBOOKS_REFRESH_TOKEN": "", "QUICKBOOKS_CUSTOMER_ID": "", "QUICKBOOKS_CLASS_ID": "", "QUICKBOOKS_DEPOSIT_ACCOUNT_ID": "", "QUICKBOOKS_PAYMENT_METHOD_ID": "", "QUICKBOOKS_DUES_ITEM_ID": "", "QUICKBOOKS_TRIP_FEE_ITEM_ID": "", "QUICKBOOKS_PROCESSING_FEE_ITEM_ID": ""}}' > env.json
 
 _bundle.zip: clean
 	poetry bundle venv _bundle/ --without dev --clear --platform manylinux_2_39_x86_64 --python /usr/bin/python

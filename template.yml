@@ -26,6 +26,7 @@ Resources:
           QUICKBOOKS_DEPOSIT_ACCOUNT_ID:
           QUICKBOOKS_PAYMENT_METHOD_ID:
           QUICKBOOKS_DUES_ITEM_ID:
+          QUICKBOOKS_TRIP_FEE_ITEM_ID:
           QUICKBOOKS_PROCESSING_FEE_ITEM_ID:
       Events:
         HttpApiEvent:

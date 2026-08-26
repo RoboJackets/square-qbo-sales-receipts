@@ -328,6 +328,26 @@ def build_dues_line(order_line_item: OrderLineItem) -> SalesItemLine:
     return dues
 
 
+def build_trip_fee_line(order_line_item: OrderLineItem) -> SalesItemLine:
+    """
+    Build a sales item line for trip fees
+    """
+    trip_fee = SalesItemLine()
+    trip_fee.SalesItemLineDetail = SalesItemLineDetail()
+    trip_fee.SalesItemLineDetail.Qty = None
+    trip_fee.SalesItemLineDetail.UnitPrice = None
+    trip_fee.SalesItemLineDetail.ItemRef = Ref()
+    trip_fee.SalesItemLineDetail.ItemRef.value = os.environ["QUICKBOOKS_TRIP_FEE_ITEM_ID"]
+    trip_fee.SalesItemLineDetail.ClassRef = Ref()
+    trip_fee.SalesItemLineDetail.ClassRef.value = os.environ["QUICKBOOKS_CLASS_ID"]
+    trip_fee.Description = " - ".join(
+        [order_line_item.name, order_line_item.variation_name]  # type: ignore[list-item]
+    )
+    trip_fee.Amount = order_line_item.total_money.amount / 100  # type: ignore[union-attr,operator]
+
+    return trip_fee
+
+
 def build_processing_fee_line(
     order_line_item: OrderLineItem, payment: Payment
 ) -> SalesItemLine:
@@ -376,6 +396,7 @@ def process_payout(payout_id: str) -> dict[str, str]:
     )
 
     validate_item(qb, "Dues", os.environ["QUICKBOOKS_DUES_ITEM_ID"])
+    validate_item(qb, "Trip Fee", os.environ["QUICKBOOKS_TRIP_FEE_ITEM_ID"])
     validate_item(qb, "Processing Fee", os.environ["QUICKBOOKS_PROCESSING_FEE_ITEM_ID"])
 
     existing_sales_receipts = SalesReceipt.filter(qb=qb, PaymentRefNum=end_to_end_id)
@@ -419,6 +440,9 @@ def process_payout(payout_id: str) -> dict[str, str]:
 
             if order_line_item.name == "Dues":
                 receipt_lines.append(build_dues_line(order_line_item))
+
+            elif order_line_item.name == "Trip Fee":
+                receipt_lines.append(build_trip_fee_line(order_line_item))
 
             else:
                 raise ValueError(

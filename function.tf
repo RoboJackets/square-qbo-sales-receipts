@@ -107,6 +107,7 @@ resource "aws_lambda_function" "lambda_function" {
       QUICKBOOKS_DEPOSIT_ACCOUNT_ID     = sensitive("")
       QUICKBOOKS_PAYMENT_METHOD_ID      = sensitive("")
       QUICKBOOKS_DUES_ITEM_ID           = sensitive("")
+      QUICKBOOKS_TRIP_FEE_ITEM_ID       = sensitive("")
       QUICKBOOKS_PROCESSING_FEE_ITEM_ID = sensitive("")
     }
   }
