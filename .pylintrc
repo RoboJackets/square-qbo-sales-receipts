@@ -1,5 +1,5 @@
 [BASIC]
-disable=broad-exception-caught,line-too-long
+disable=broad-exception-caught,line-too-long,too-many-statements
 
 [FORMAT]
 expected-line-ending-format=LF
