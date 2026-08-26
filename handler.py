@@ -337,7 +337,9 @@ def build_trip_fee_line(order_line_item: OrderLineItem) -> SalesItemLine:
     trip_fee.SalesItemLineDetail.Qty = None
     trip_fee.SalesItemLineDetail.UnitPrice = None
     trip_fee.SalesItemLineDetail.ItemRef = Ref()
-    trip_fee.SalesItemLineDetail.ItemRef.value = os.environ["QUICKBOOKS_TRIP_FEE_ITEM_ID"]
+    trip_fee.SalesItemLineDetail.ItemRef.value = os.environ[
+        "QUICKBOOKS_TRIP_FEE_ITEM_ID"
+    ]
     trip_fee.SalesItemLineDetail.ClassRef = Ref()
     trip_fee.SalesItemLineDetail.ClassRef.value = os.environ["QUICKBOOKS_CLASS_ID"]
     trip_fee.Description = " - ".join(
