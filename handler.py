@@ -100,7 +100,9 @@ def get_auth_client() -> AuthClient:
                     "QUICKBOOKS_PAYMENT_METHOD_ID"
                 ],
                 "QUICKBOOKS_DUES_ITEM_ID": os.environ["QUICKBOOKS_DUES_ITEM_ID"],
-                "QUICKBOOKS_DUES_ITEM_ID": os.environ["QUICKBOOKS_TRIP_FEE_ITEM_ID"],
+                "QUICKBOOKS_TRIP_FEE_ITEM_ID": os.environ[
+                    "QUICKBOOKS_TRIP_FEE_ITEM_ID"
+                ],
                 "QUICKBOOKS_PROCESSING_FEE_ITEM_ID": os.environ[
                     "QUICKBOOKS_PROCESSING_FEE_ITEM_ID"
                 ],
@@ -197,7 +199,7 @@ def quickbooks_auth_callback() -> Response:  # type: ignore[type-arg]
         "QUICKBOOKS_DEPOSIT_ACCOUNT_ID": os.environ["QUICKBOOKS_DEPOSIT_ACCOUNT_ID"],
         "QUICKBOOKS_PAYMENT_METHOD_ID": os.environ["QUICKBOOKS_PAYMENT_METHOD_ID"],
         "QUICKBOOKS_DUES_ITEM_ID": os.environ["QUICKBOOKS_DUES_ITEM_ID"],
-        "QUICKBOOKS_DUES_ITEM_ID": os.environ["QUICKBOOKS_TRIP_FEE_ITEM_ID"],
+        "QUICKBOOKS_TRIP_FEE_ITEM_ID": os.environ["QUICKBOOKS_TRIP_FEE_ITEM_ID"],
         "QUICKBOOKS_PROCESSING_FEE_ITEM_ID": os.environ[
             "QUICKBOOKS_PROCESSING_FEE_ITEM_ID"
         ],
