@@ -100,9 +100,7 @@ def get_auth_client() -> AuthClient:
                     "QUICKBOOKS_PAYMENT_METHOD_ID"
                 ],
                 "QUICKBOOKS_DUES_ITEM_ID": os.environ["QUICKBOOKS_DUES_ITEM_ID"],
-                "QUICKBOOKS_DUES_ITEM_ID": os.environ[
-                    "QUICKBOOKS_TRIP_FEE_ITEM_ID"
-                ],
+                "QUICKBOOKS_DUES_ITEM_ID": os.environ["QUICKBOOKS_TRIP_FEE_ITEM_ID"],
                 "QUICKBOOKS_PROCESSING_FEE_ITEM_ID": os.environ[
                     "QUICKBOOKS_PROCESSING_FEE_ITEM_ID"
                 ],
