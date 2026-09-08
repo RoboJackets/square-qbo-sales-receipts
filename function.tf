@@ -94,21 +94,22 @@ resource "aws_lambda_function" "lambda_function" {
 
   environment {
     variables = {
-      SQUARE_TOKEN                      = sensitive("")
-      SQUARE_SIGNATURE_KEY              = sensitive("")
-      QUICKBOOKS_ENVIRONMENT            = sensitive("")
-      QUICKBOOKS_CLIENT_ID              = sensitive("")
-      QUICKBOOKS_CLIENT_SECRET          = sensitive("")
-      QUICKBOOKS_COMPANY_ID             = sensitive("")
-      QUICKBOOKS_ACCESS_TOKEN           = sensitive("")
-      QUICKBOOKS_REFRESH_TOKEN          = sensitive("")
-      QUICKBOOKS_CUSTOMER_ID            = sensitive("")
-      QUICKBOOKS_CLASS_ID               = sensitive("")
-      QUICKBOOKS_DEPOSIT_ACCOUNT_ID     = sensitive("")
-      QUICKBOOKS_PAYMENT_METHOD_ID      = sensitive("")
-      QUICKBOOKS_DUES_ITEM_ID           = sensitive("")
-      QUICKBOOKS_TRIP_FEE_ITEM_ID       = sensitive("")
-      QUICKBOOKS_PROCESSING_FEE_ITEM_ID = sensitive("")
+      SQUARE_TOKEN                          = sensitive("")
+      SQUARE_SIGNATURE_KEY                  = sensitive("")
+      QUICKBOOKS_ENVIRONMENT                = sensitive("")
+      QUICKBOOKS_CLIENT_ID                  = sensitive("")
+      QUICKBOOKS_CLIENT_SECRET              = sensitive("")
+      QUICKBOOKS_COMPANY_ID                 = sensitive("")
+      QUICKBOOKS_ACCESS_TOKEN               = sensitive("")
+      QUICKBOOKS_REFRESH_TOKEN              = sensitive("")
+      QUICKBOOKS_CUSTOMER_ID                = sensitive("")
+      QUICKBOOKS_CLASS_ID                   = sensitive("")
+      QUICKBOOKS_DEPOSIT_ACCOUNT_ID         = sensitive("")
+      QUICKBOOKS_PAYMENT_METHOD_ID          = sensitive("")
+      QUICKBOOKS_DUES_ITEM_ID               = sensitive("")
+      QUICKBOOKS_TRIP_FEE_ITEM_ID           = sensitive("")
+      QUICKBOOKS_EVENT_REGISTRATION_ITEM_ID = sensitive("")
+      QUICKBOOKS_PROCESSING_FEE_ITEM_ID     = sensitive("")
     }
   }
 

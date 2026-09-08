@@ -103,6 +103,9 @@ def get_auth_client() -> AuthClient:
                 "QUICKBOOKS_TRIP_FEE_ITEM_ID": os.environ[
                     "QUICKBOOKS_TRIP_FEE_ITEM_ID"
                 ],
+                "QUICKBOOKS_EVENT_REGISTRATION_ITEM_ID": os.environ[
+                    "QUICKBOOKS_EVENT_REGISTRATION_ITEM_ID"
+                ],
                 "QUICKBOOKS_PROCESSING_FEE_ITEM_ID": os.environ[
                     "QUICKBOOKS_PROCESSING_FEE_ITEM_ID"
                 ],
@@ -200,6 +203,9 @@ def quickbooks_auth_callback() -> Response:  # type: ignore[type-arg]
         "QUICKBOOKS_PAYMENT_METHOD_ID": os.environ["QUICKBOOKS_PAYMENT_METHOD_ID"],
         "QUICKBOOKS_DUES_ITEM_ID": os.environ["QUICKBOOKS_DUES_ITEM_ID"],
         "QUICKBOOKS_TRIP_FEE_ITEM_ID": os.environ["QUICKBOOKS_TRIP_FEE_ITEM_ID"],
+        "QUICKBOOKS_EVENT_REGISTRATION_ITEM_ID": os.environ[
+            "QUICKBOOKS_EVENT_REGISTRATION_ITEM_ID"
+        ],
         "QUICKBOOKS_PROCESSING_FEE_ITEM_ID": os.environ[
             "QUICKBOOKS_PROCESSING_FEE_ITEM_ID"
         ],
@@ -354,6 +360,37 @@ def build_trip_fee_line(order_line_item: OrderLineItem) -> SalesItemLine:
     return trip_fee
 
 
+def build_student_registration_line(order_line_item: OrderLineItem) -> SalesItemLine:
+    """
+    Build a sales item line for student registrations
+
+    Uses the base price rather than the total, since sales tax is incorrectly
+    applied to this item in Square
+    """
+    student_registration = SalesItemLine()
+    student_registration.SalesItemLineDetail = SalesItemLineDetail()
+    student_registration.SalesItemLineDetail.Qty = float(order_line_item.quantity)
+    student_registration.SalesItemLineDetail.UnitPrice = (
+        order_line_item.base_price_money.amount / 100  # type: ignore[union-attr,operator]
+    )
+    student_registration.SalesItemLineDetail.ItemRef = Ref()
+    student_registration.SalesItemLineDetail.ItemRef.value = os.environ[
+        "QUICKBOOKS_EVENT_REGISTRATION_ITEM_ID"
+    ]
+    student_registration.SalesItemLineDetail.ClassRef = Ref()
+    student_registration.SalesItemLineDetail.ClassRef.value = os.environ[
+        "QUICKBOOKS_CLASS_ID"
+    ]
+    student_registration.Description = " - ".join(
+        [order_line_item.name, order_line_item.variation_name]  # type: ignore[list-item]
+    )
+    student_registration.Amount = (
+        order_line_item.base_price_money.amount * float(order_line_item.quantity) / 100  # type: ignore[union-attr,operator]
+    )
+
+    return student_registration
+
+
 def build_processing_fee_line(
     order_line_item: OrderLineItem, payment: Payment
 ) -> SalesItemLine:
@@ -403,6 +440,11 @@ def process_payout(payout_id: str) -> dict[str, str]:
 
     validate_item(qb, "Dues", os.environ["QUICKBOOKS_DUES_ITEM_ID"])
     validate_item(qb, "Trip Fee", os.environ["QUICKBOOKS_TRIP_FEE_ITEM_ID"])
+    validate_item(
+        qb,
+        "Student Registration",
+        os.environ["QUICKBOOKS_EVENT_REGISTRATION_ITEM_ID"],
+    )
     validate_item(qb, "Processing Fee", os.environ["QUICKBOOKS_PROCESSING_FEE_ITEM_ID"])
 
     existing_sales_receipts = SalesReceipt.filter(qb=qb, PaymentRefNum=end_to_end_id)
@@ -449,6 +491,9 @@ def process_payout(payout_id: str) -> dict[str, str]:
 
             elif order_line_item.name == "Trip Fee":
                 receipt_lines.append(build_trip_fee_line(order_line_item))
+
+            elif order_line_item.name == "Student Registration":
+                receipt_lines.append(build_student_registration_line(order_line_item))
 
             else:
                 raise ValueError(
