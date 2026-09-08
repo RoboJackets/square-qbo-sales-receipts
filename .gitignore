@@ -222,7 +222,7 @@ _bundle/
 _bundle.zip
 
 # Local testing files
-env.json
+*.json
 
 # Terraform stuff
 .terraform/
