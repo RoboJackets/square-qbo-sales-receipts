@@ -4,6 +4,9 @@ clean:
 	rm -rf _bundle
 	rm -rf _bundle.zip
 
+event.json:
+	echo '{"payout_id": ""}' > event.json
+
 env.json:
 	echo '{"ApiLambda": {"SQUARE_TOKEN": "", "SQUARE_SIGNATURE_KEY": "", "QUICKBOOKS_ENVIRONMENT": "sandbox", "QUICKBOOKS_CLIENT_ID": "", "QUICKBOOKS_CLIENT_SECRET": "", "QUICKBOOKS_COMPANY_ID": "", "QUICKBOOKS_ACCESS_TOKEN": "", "QUICKBOOKS_REFRESH_TOKEN": "", "QUICKBOOKS_CUSTOMER_ID": "", "QUICKBOOKS_CLASS_ID": "", "QUICKBOOKS_DEPOSIT_ACCOUNT_ID": "", "QUICKBOOKS_PAYMENT_METHOD_ID": "", "QUICKBOOKS_DUES_ITEM_ID": "", "QUICKBOOKS_TRIP_FEE_ITEM_ID": "", "QUICKBOOKS_EVENT_REGISTRATION_ITEM_ID": "", "QUICKBOOKS_PROCESSING_FEE_ITEM_ID": ""}}' > env.json
 
@@ -14,5 +17,5 @@ _bundle.zip: clean
 local: _bundle.zip env.json
 	sam local start-api --region us-east-1 --profile gatech_771971951923_Shibboleth-fulladmin_credfile --docker-network host --env-vars env.json
 
-invoke: _bundle.zip env.json
+invoke: _bundle.zip env.json event.json
 	sam local invoke --region us-east-1 --profile gatech_771971951923_Shibboleth-fulladmin_credfile --docker-network host --env-vars env.json --event event.json
